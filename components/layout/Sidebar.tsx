@@ -43,20 +43,20 @@ export default function Sidebar() {
       className={`${collapsed ? 'w-18' : 'w-64'} sidebar-transition bg-white border-r border-gray-200 flex flex-col h-full z-20 shrink-0 relative select-none`}
     >
       {/* Brand Header */}
-      <div className="h-16 flex items-center px-4 bg-[#0053c2] shrink-0 border-b border-blue-900/20">
+      <div className="h-16 flex items-center px-4 bg-[#1a3a6b] shrink-0 border-b border-blue-900/20">
         {!collapsed ? (
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center shrink-0 shadow-sm">
-              <Building2 className="w-5 h-5 text-[#0053c2]" />
+              <Building2 className="w-5 h-5 text-[#1a3a6b]" />
             </div>
             <div className="min-w-0">
-              <div className="text-white font-bold text-sm leading-tight tracking-tight">Bank of America</div>
+              <div className="text-white font-bold text-sm leading-tight tracking-tight">Wells Banking</div>
               <div className="text-blue-200 text-xs font-normal">Online Banking</div>
             </div>
           </div>
         ) : (
           <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center mx-auto shadow-sm">
-            <Building2 className="w-5 h-5 text-[#0053c2]" />
+            <Building2 className="w-5 h-5 text-[#1a3a6b]" />
           </div>
         )}
       </div>

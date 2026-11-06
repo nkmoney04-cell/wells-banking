@@ -19,6 +19,7 @@ import {
   CreditCard,
   Building2,
 } from 'lucide-react';
+import PinModal from '@/components/ui/PinModal';
 
 export default function BillPayPage() {
   const { accounts, addTransaction } = useBanking();
@@ -29,6 +30,7 @@ export default function BillPayPage() {
   const [paymentDate, setPaymentDate] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [successBill, setSuccessBill] = useState<Bill | null>(null);
+  const [showPinModal, setShowPinModal] = useState(false);
 
   const handlePayBill = (bill: Bill) => {
     setSelectedBill(bill);
@@ -66,7 +68,25 @@ export default function BillPayPage() {
   const totalDue = bills.filter(b => b.status !== 'paid').reduce((s, b) => s + b.amount, 0);
 
   return (
-    <div className="max-w-4xl mx-auto animate-fade-in space-y-6">
+    <>
+      <PinModal
+        isOpen={showPinModal}
+        onSuccess={() => {
+          setShowPinModal(false);
+          confirmPayment();
+        }}
+        onCancel={() => setShowPinModal(false)}
+        title="Authorize Bill Payment"
+        subtitle={
+          selectedBill
+            ? `Enter your 4-digit Wells Banking PIN to authorize payment of ${formatCurrency(
+                parseFloat(paymentAmount) || selectedBill.amount
+              )} to ${selectedBill.name}.`
+            : 'Enter your 4-digit Wells Banking PIN.'
+        }
+      />
+
+      <div className="max-w-4xl mx-auto animate-fade-in space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Bill Pay Center</h1>
@@ -232,14 +252,14 @@ export default function BillPayPage() {
                   </button>
                   <button
                     type="button"
-                    onClick={confirmPayment}
+                    onClick={() => setShowPinModal(true)}
                     disabled={isLoading}
                     className="btn-primary flex-1 text-xs py-2 bg-emerald-600 hover:bg-emerald-700"
                   >
                     {isLoading ? (
                       <span className="flex items-center justify-center gap-1.5">
                         <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                        Paying...
+                        Authorizing...
                       </span>
                     ) : (
                       'Authorize Pay'
@@ -262,6 +282,7 @@ export default function BillPayPage() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

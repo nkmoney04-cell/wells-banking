@@ -13,7 +13,6 @@ import {
   EyeOff,
   AlertCircle,
   Loader2,
-  CheckCircle2,
   ArrowRight,
 } from 'lucide-react';
 
@@ -32,7 +31,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     if (!userId.trim()) {
-      setError('Please enter your Bank of America Online ID');
+      setError('Please enter your Wells Banking Online ID');
       return;
     }
     setStep('password');
@@ -58,13 +57,13 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col font-sans">
       {/* Top Banner Header */}
-      <header className="bg-[#0053c2] text-white">
+      <header className="bg-[#1a3a6b] text-white">
         <div className="max-w-7xl mx-auto px-4 py-3.5 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-white rounded-md flex items-center justify-center shadow-xs">
-              <Building2 className="w-5 h-5 text-[#0053c2]" />
+              <Building2 className="w-5 h-5 text-[#1a3a6b]" />
             </div>
-            <span className="text-white font-bold text-lg tracking-tight">Bank of America</span>
+            <span className="text-white font-bold text-lg tracking-tight">Wells Banking</span>
           </Link>
           <div className="flex items-center gap-4 text-xs font-semibold">
             <a href="#" className="text-blue-200 hover:text-white transition-colors">Locations</a>
@@ -78,9 +77,9 @@ export default function LoginPage() {
           {/* Main Login Card */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
             {/* Card Brand Header */}
-            <div className="bg-[#0053c2] px-8 py-5 text-white">
+            <div className="bg-[#1a3a6b] px-8 py-5 text-white">
               <h1 className="text-lg font-bold tracking-tight">Sign In</h1>
-              <p className="text-blue-200 text-xs mt-0.5">Bank of America Online Banking Portal</p>
+              <p className="text-blue-200 text-xs mt-0.5">Wells Banking Online Portal</p>
             </div>
 
             {/* Card Form Body */}
@@ -105,13 +104,13 @@ export default function LoginPage() {
                       type="text"
                       value={userId}
                       onChange={e => setUserId(e.target.value)}
-                      placeholder="Enter your Online ID"
+                      placeholder="Enter your email address"
                       className="input-field text-sm"
                       autoFocus
                       autoComplete="username"
                     />
                     <p className="text-[11px] text-gray-400 mt-1.5">
-                      Hint: Enter any email or username (e.g. james.anderson@email.com)
+                      Hint: Use the email address registered in Firebase Authentication.
                     </p>
                   </div>
 
@@ -181,7 +180,6 @@ export default function LoginPage() {
                       </button>
                     </div>
                     <p className="text-[11px] text-gray-400 mt-1.5">
-                      Hint: Any passcode with 6+ characters will sign you in
                     </p>
                   </div>
 
@@ -232,7 +230,7 @@ export default function LoginPage() {
       </div>
 
       <footer className="py-4 text-center text-[11px] text-gray-400 bg-white border-t border-gray-200">
-        © 2026 Bank of America Corporation · Member FDIC · Equal Housing Lender
+        © 2026 Wells Banking Corporation · Member FDIC · Equal Housing Lender
       </footer>
     </div>
   );

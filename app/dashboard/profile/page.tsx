@@ -20,6 +20,7 @@ import {
   CheckCircle2,
   Building2,
 } from 'lucide-react';
+import { firebaseAuth } from '@/lib/firebase/client';
 
 export default function ProfilePage() {
   const { user, accounts, logout } = useBanking();
@@ -30,6 +31,42 @@ export default function ProfilePage() {
   const [lastName, setLastName] = useState(user?.lastName || '');
   const [phone, setPhone] = useState(user?.phone || '');
   const [email, setEmail] = useState(user?.email || '');
+  const [newPin, setNewPin] = useState('');
+  const [confirmPin, setConfirmPin] = useState('');
+  const [pinMessage, setPinMessage] = useState('');
+  const [pinError, setPinError] = useState('');
+  const [savingPin, setSavingPin] = useState(false);
+
+  const handlePinSetup = async (event: React.FormEvent) => {
+    event.preventDefault();
+    setPinError('');
+    setPinMessage('');
+    setSavingPin(true);
+
+    try {
+      const idToken = await firebaseAuth?.currentUser?.getIdToken();
+      if (!idToken) throw new Error('Please sign in again.');
+
+      const response = await fetch('/api/pin/setup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${idToken}`,
+        },
+        body: JSON.stringify({ pin: newPin, confirmation: confirmPin }),
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || 'Unable to set PIN.');
+
+      setNewPin('');
+      setConfirmPin('');
+      setPinMessage('Transaction PIN created successfully.');
+    } catch (error) {
+      setPinError(error instanceof Error ? error.message : 'Unable to set PIN.');
+    } finally {
+      setSavingPin(false);
+    }
+  };
 
   const handleSave = async () => {
     await new Promise(r => setTimeout(r, 600));
@@ -203,6 +240,42 @@ export default function ProfilePage() {
         {activeTab === 'security' && (
           <div className="p-6 space-y-4">
             <h3 className="font-bold text-gray-800 text-sm tracking-tight mb-2">Security & Identity Controls</h3>
+
+            <form onSubmit={handlePinSetup} className="rounded-xl border border-blue-100 bg-blue-50/40 p-4 space-y-3 mb-4">
+              <div>
+                <div className="font-bold text-gray-800 text-xs">Transaction PIN</div>
+                <div className="text-[11px] text-gray-500 mt-0.5">Create or replace the 4-digit PIN used to authorize transfers and payments.</div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <input
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]{4}"
+                  maxLength={4}
+                  value={newPin}
+                  onChange={event => setNewPin(event.target.value.replace(/\D/g, '').slice(0, 4))}
+                  placeholder="New 4-digit PIN"
+                  className="input-field text-xs py-2"
+                  aria-label="New transaction PIN"
+                />
+                <input
+                  type="password"
+                  inputMode="numeric"
+                  pattern="[0-9]{4}"
+                  maxLength={4}
+                  value={confirmPin}
+                  onChange={event => setConfirmPin(event.target.value.replace(/\D/g, '').slice(0, 4))}
+                  placeholder="Confirm PIN"
+                  className="input-field text-xs py-2"
+                  aria-label="Confirm transaction PIN"
+                />
+              </div>
+              {pinError && <div className="text-xs font-semibold text-red-600">{pinError}</div>}
+              {pinMessage && <div className="text-xs font-semibold text-emerald-700">{pinMessage}</div>}
+              <button type="submit" disabled={savingPin || newPin.length !== 4 || confirmPin.length !== 4} className="btn-primary py-2 px-3 text-xs">
+                {savingPin ? 'Saving...' : 'Save Transaction PIN'}
+              </button>
+            </form>
 
             {[
               { icon: Key, title: 'Change Online Passcode', desc: 'Update your alphanumeric banking passcode regularly', action: 'Change' },

@@ -202,12 +202,12 @@ export default function DepositPage() {
 
               {/* Security info box */}
               <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 text-xs">
-                <div className="font-bold text-[#0053c2] mb-1.5 flex items-center gap-1.5">
-                  <ShieldCheck className="w-4 h-4" /> Bank of America Deposit Guidelines
+                <div className="font-bold text-[#1a3a6b] mb-1.5 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4" /> Wells Banking Deposit Guidelines
                 </div>
                 <ul className="text-blue-900/80 space-y-1 font-medium">
                   <li>• Ensure the check is made payable exactly to your legal account name</li>
-                  <li>• Endorse the back with signature and "For Bank of America Mobile Deposit Only"</li>
+                  <li>• Endorse the back with signature and "For Wells Banking Mobile Deposit Only"</li>
                   <li>• Photograph in a well-lit area against a dark, non-reflective background</li>
                 </ul>
               </div>
@@ -364,9 +364,9 @@ export default function DepositPage() {
               </div>
 
               <div className="flex items-start gap-2.5 text-xs text-gray-500 bg-blue-50/60 border border-blue-100 rounded-xl p-3.5">
-                <ShieldCheck className="w-4 h-4 text-[#0053c2] shrink-0 mt-0.5" />
+                <ShieldCheck className="w-4 h-4 text-[#1a3a6b] shrink-0 mt-0.5" />
                 <span className="leading-relaxed">
-                  By clicking Submit Deposit, you certify that this item is a genuine negotiable check, has not been deposited elsewhere, and meets Bank of America mobile banking deposit requirements.
+                  By clicking Submit Deposit, you certify that this item is a genuine negotiable check, has not been deposited elsewhere, and meets Wells Banking mobile banking deposit requirements.
                 </span>
               </div>
             </div>

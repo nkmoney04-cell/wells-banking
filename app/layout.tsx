@@ -10,9 +10,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Bank of America - Online Banking',
-  description: 'Secure online banking — manage your accounts, pay bills, transfer money, and more.',
-  keywords: 'banking, online banking, bank of america, checking, savings, transfer',
+  title: 'Wells Banking - Online Banking',
+  description: 'Secure online banking — manage your accounts, pay bills, transfer money, and more with Wells Banking.',
+  keywords: 'banking, online banking, wells banking, checking, savings, transfer',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

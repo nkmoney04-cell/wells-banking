@@ -7,30 +7,30 @@ import Sidebar from '@/components/layout/Sidebar';
 import TopBar from '@/components/layout/TopBar';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated } = useBanking();
+  const { isAuthenticated, isAuthLoading } = useBanking();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    if (!isAuthenticated) {
+    if (!isAuthLoading && !isAuthenticated) {
       router.push('/login');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, isAuthLoading, router]);
 
   // Wait until mounted to prevent hydration flash
   if (!mounted) {
     return (
       <div className="flex h-screen bg-gray-50 items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-3 border-[#0053c2] border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-xs text-gray-500 font-medium">Loading Bank of America portal...</span>
+          <div className="w-10 h-10 border-3 border-[#1a3a6b] border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-xs text-gray-500 font-medium">Loading Wells Banking portal...</span>
         </div>
       </div>
     );
   }
 
-  if (!isAuthenticated) return null;
+  if (isAuthLoading || !isAuthenticated) return null;
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden font-sans">

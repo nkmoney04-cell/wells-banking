@@ -67,11 +67,21 @@ body {
 @keyframes spin-slow {
   to { transform: rotate(360deg); }
 }
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  15%     { transform: translateX(-8px); }
+  30%     { transform: translateX(8px); }
+  45%     { transform: translateX(-8px); }
+  60%     { transform: translateX(8px); }
+  75%     { transform: translateX(-4px); }
+  90%     { transform: translateX(4px); }
+}
 
 .animate-fade-in         { animation: fadeIn 0.4s ease-out; }
 .animate-slide-in-right  { animation: slideInRight 0.3s ease-out; }
 .animate-slide-in-left   { animation: slideInLeft 0.3s ease-out; }
 .animate-scale-in        { animation: scaleIn 0.25s ease-out; }
+.animate-shake           { animation: shake 0.6s ease-in-out; }
 
 /* Skeleton shimmer */
 .skeleton {

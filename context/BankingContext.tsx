@@ -10,6 +10,8 @@ import {
   mockNotifications,
 } from '@/lib/mock-data';
 import { generateId } from '@/lib/utils';
+import { onAuthStateChanged, signInWithEmailAndPassword, signOut, User as FirebaseUser } from 'firebase/auth';
+import { firebaseAuth } from '@/lib/firebase/client';
 
 interface BankingContextType {
   user: User | null;
@@ -18,6 +20,7 @@ interface BankingContextType {
   bills: Bill[];
   notifications: Notification[];
   isAuthenticated: boolean;
+  isAuthLoading: boolean;
   selectedAccountId: string;
   login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
@@ -31,76 +34,65 @@ interface BankingContextType {
 const BankingContext = createContext<BankingContextType | undefined>(undefined);
 
 export function BankingProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('bofa_user');
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch {
-          // ignore error
-        }
-      }
-    }
-    return mockUser; // default to logged in user for immediate seamless experience
-  });
-
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('bofa_auth');
-      if (saved !== null) {
-        return saved === 'true';
-      }
-    }
-    return true; // default to true so all subpages work seamlessly on direct load/refresh
-  });
-
+  const [user, setUser] = useState<User | null>(null);
+  // Always start unauthenticated — user must log in each session
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
   const [accounts, setAccounts] = useState<Account[]>(mockAccounts);
   const [transactions, setTransactions] = useState<Transaction[]>(mockTransactions);
-  const [bills, setBills] = useState<Bill[]>(mockBills);
+  const [bills] = useState<Bill[]>(mockBills);
   const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
   const [selectedAccountId, setSelectedAccountId] = useState<string>('acc_001');
 
-  // Sync auth state to localStorage
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('bofa_auth', isAuthenticated ? 'true' : 'false');
-      if (user) {
-        localStorage.setItem('bofa_user', JSON.stringify(user));
-      } else {
-        localStorage.removeItem('bofa_user');
-      }
-    }
-  }, [isAuthenticated, user]);
-
   const login = useCallback(async (email: string, password: string): Promise<boolean> => {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    if (email && password.length >= 6) {
-      setUser(mockUser);
-      setIsAuthenticated(true);
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('bofa_auth', 'true');
-        localStorage.setItem('bofa_user', JSON.stringify(mockUser));
-      }
+    try {
+      if (!firebaseAuth) throw new Error('Firebase is not configured.');
+      await signInWithEmailAndPassword(firebaseAuth, email.trim(), password);
       return true;
+    } catch (error) {
+      console.error('Firebase login failed', error);
+      return false;
     }
-    return false;
   }, []);
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
+    if (!firebaseAuth) {
+      setUser(null);
+      setIsAuthenticated(false);
+      return;
+    }
+    await signOut(firebaseAuth);
     setUser(null);
     setIsAuthenticated(false);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('bofa_auth', 'false');
-      localStorage.removeItem('bofa_user');
+  }, []);
+
+  useEffect(() => {
+    if (!firebaseAuth) {
+      setIsAuthLoading(false);
+      return;
     }
+    return onAuthStateChanged(firebaseAuth, (firebaseUser: FirebaseUser | null) => {
+      if (firebaseUser) {
+        setUser({
+          ...mockUser,
+          id: firebaseUser.uid,
+          email: firebaseUser.email || mockUser.email,
+          firstName: firebaseUser.displayName?.split(' ')[0] || mockUser.firstName,
+          lastName: firebaseUser.displayName?.split(' ').slice(1).join(' ') || mockUser.lastName,
+        });
+        setIsAuthenticated(true);
+      } else {
+        setUser(null);
+        setIsAuthenticated(false);
+      }
+      setIsAuthLoading(false);
+    });
   }, []);
 
   const addTransaction = useCallback((transaction: Omit<Transaction, 'id'>) => {
     const newTransaction: Transaction = { ...transaction, id: generateId() };
     setTransactions(prev => [newTransaction, ...prev]);
 
-    // Update account balance
     setAccounts(prev =>
       prev.map(acc => {
         if (acc.id === transaction.accountId) {
@@ -135,6 +127,7 @@ export function BankingProvider({ children }: { children: ReactNode }) {
         bills,
         notifications,
         isAuthenticated,
+        isAuthLoading,
         selectedAccountId,
         login,
         logout,

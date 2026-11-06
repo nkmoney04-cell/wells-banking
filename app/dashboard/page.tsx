@@ -300,14 +300,14 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Erica Assistant Banner */}
-      <div className="bg-gradient-to-r from-[#0053c2] to-[#0041a8] rounded-xl p-5 flex items-center gap-4 text-white shadow-sm">
+      {/* Wells Assistant Banner */}
+      <div className="bg-gradient-to-r from-[#1a3a6b] to-[#0d2447] rounded-xl p-5 flex items-center gap-4 text-white shadow-sm">
         <div className="w-12 h-12 bg-white/15 rounded-xl flex items-center justify-center shrink-0 border border-white/20">
           <Bot className="w-6 h-6 text-white" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="font-bold text-sm tracking-tight flex items-center gap-1.5">
-            <span>Erica, your virtual financial assistant</span>
+            <span>Wells Assistant, your virtual financial concierge</span>
             <span className="bg-blue-400/30 text-blue-100 text-[10px] px-2 py-0.5 rounded-full font-semibold">AI Powered</span>
           </div>
           <div className="text-blue-100 text-xs mt-0.5 leading-relaxed">
@@ -316,7 +316,7 @@ export default function DashboardPage() {
         </div>
         <Link
           href="/dashboard/bill-pay"
-          className="bg-white text-[#0053c2] text-xs font-bold px-4 py-2.5 rounded-lg hover:bg-blue-50 transition-colors shrink-0 shadow-sm"
+          className="bg-white text-[#1a3a6b] text-xs font-bold px-4 py-2.5 rounded-lg hover:bg-blue-50 transition-colors shrink-0 shadow-sm"
         >
           Schedule Bill
         </Link>

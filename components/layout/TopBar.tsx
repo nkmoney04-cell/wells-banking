@@ -62,7 +62,7 @@ export default function TopBar() {
     <header className="h-16 bg-white border-b border-gray-200 flex items-center px-6 gap-4 shrink-0 z-10">
       {/* Breadcrumb / Page title */}
       <div className="flex-1">
-        <div className="text-xs font-medium text-gray-400">Bank of America Portal</div>
+        <div className="text-xs font-medium text-gray-400">Wells Banking Portal</div>
         <div className="font-bold text-gray-800 text-sm tracking-tight">Online Banking</div>
       </div>
 
@@ -152,7 +152,7 @@ export default function TopBar() {
                 )}
               </div>
               <div className="px-4 py-2.5 border-t border-gray-100 bg-gray-50/50 text-center">
-                <span className="text-xs text-gray-400 font-medium">Bank of America Security Center</span>
+                <span className="text-xs text-gray-400 font-medium">Wells Banking Security Center</span>
               </div>
             </div>
           )}

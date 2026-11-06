@@ -165,7 +165,7 @@ export default function AccountsPage() {
     <div className="max-w-5xl mx-auto animate-fade-in space-y-6">
       <div>
         <h1 className="text-2xl font-bold text-gray-900 tracking-tight">My Accounts</h1>
-        <p className="text-gray-500 text-sm mt-0.5">Manage and review all your Bank of America deposit and credit accounts</p>
+        <p className="text-gray-500 text-sm mt-0.5">Manage and review all your Wells Banking deposit and credit accounts</p>
       </div>
 
       {/* Net Summary Banner */}

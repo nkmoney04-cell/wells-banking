@@ -231,7 +231,7 @@ export default function TransactionsPage() {
             </div>
             <div className="px-5 py-3 bg-gray-50/50 border-t border-gray-100 flex items-center justify-between text-xs text-gray-500 font-medium">
               <span>Showing {filteredTransactions.length} of {transactions.length} records</span>
-              <span className="text-[#0053c2]">Bank of America Verified Statement</span>
+              <span className="text-[#1a3a6b] font-semibold">Wells Banking Verified Statement</span>
             </div>
           </>
         )}

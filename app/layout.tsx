@@ -13,6 +13,11 @@ export const metadata: Metadata = {
   title: 'Wells Banking - Online Banking',
   description: 'Secure online banking — manage your accounts, pay bills, transfer money, and more with Wells Banking.',
   keywords: 'banking, online banking, wells banking, checking, savings, transfer',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

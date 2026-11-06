@@ -34,6 +34,16 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('PIN setup failed', error);
+    if (error instanceof Error && error.message === 'FIREBASE_ADMIN_CONFIG_MISSING') {
+      return NextResponse.json({ error: 'Server Firebase Admin configuration is missing.' }, { status: 500 });
+    }
+    const firebaseError = error && typeof error === 'object' && 'code' in error ? String(error.code) : '';
+    if (firebaseError.includes('not-found') || firebaseError.includes('NOT_FOUND')) {
+      return NextResponse.json({ error: 'Firestore database is unavailable or has not been created.' }, { status: 500 });
+    }
+    if (firebaseError.includes('credential') || firebaseError.includes('private_key')) {
+      return NextResponse.json({ error: 'Firebase Admin credentials are invalid.' }, { status: 500 });
+    }
     return NextResponse.json({ error: 'Unable to set PIN.' }, { status: 500 });
   }
 }

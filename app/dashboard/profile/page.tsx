@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useBanking } from '@/context/BankingContext';
 import { formatDate, maskAccountNumber } from '@/lib/utils';
 import {
@@ -36,6 +36,12 @@ export default function ProfilePage() {
   const [pinMessage, setPinMessage] = useState('');
   const [pinError, setPinError] = useState('');
   const [savingPin, setSavingPin] = useState(false);
+
+  useEffect(() => {
+    setFirstName(user?.firstName || '');
+    setLastName(user?.lastName || '');
+    setEmail(user?.email || '');
+  }, [user]);
 
   const handlePinSetup = async (event: React.FormEvent) => {
     event.preventDefault();

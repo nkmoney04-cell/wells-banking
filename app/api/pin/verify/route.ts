@@ -47,6 +47,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('PIN verification failed', error);
+    if (error instanceof Error && error.message === 'FIREBASE_ADMIN_CONFIG_MISSING') {
+      return NextResponse.json({ error: 'Server Firebase Admin configuration is missing.' }, { status: 500 });
+    }
     return NextResponse.json({ error: 'Unable to verify PIN.' }, { status: 500 });
   }
 }

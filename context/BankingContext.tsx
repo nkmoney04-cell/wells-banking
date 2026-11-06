@@ -73,12 +73,20 @@ export function BankingProvider({ children }: { children: ReactNode }) {
     }
     return onAuthStateChanged(firebaseAuth, (firebaseUser: FirebaseUser | null) => {
       if (firebaseUser) {
+        const email = firebaseUser.email || '';
+        const emailName = email
+          .split('@')[0]
+          .replace(/[._-]+/g, ' ')
+          .trim();
+        const displayParts = firebaseUser.displayName?.trim().split(/\s+/).filter(Boolean) || [];
+        const emailParts = emailName.split(/\s+/).filter(Boolean);
+
         setUser({
           ...mockUser,
           id: firebaseUser.uid,
-          email: firebaseUser.email || mockUser.email,
-          firstName: firebaseUser.displayName?.split(' ')[0] || mockUser.firstName,
-          lastName: firebaseUser.displayName?.split(' ').slice(1).join(' ') || mockUser.lastName,
+          email,
+          firstName: displayParts[0] || emailParts[0] || email || 'User',
+          lastName: displayParts.slice(1).join(' ') || emailParts.slice(1).join(' '),
         });
         setIsAuthenticated(true);
       } else {
